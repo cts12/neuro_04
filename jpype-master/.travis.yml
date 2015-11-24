@@ -1,0 +1,34 @@
+os:
+  - linux
+
+language: python
+
+python:
+  - '2.6'
+  - '2.7'
+  - '3.3'
+  - '3.4'
+  - '3.5'
+  - "nightly"
+
+sudo: false
+
+addons:
+  apt:
+    packages:
+    - ant
+
+env:
+  matrix:
+    # one build with and without numpy support (opt numpy out)
+    - NUMPY="--install-option=--disable-numpy"
+    - NUMPY=""
+
+install:
+  - pip install . $NUMPY
+  - pip install -r test-requirements.txt
+  - ant -f test/build.xml
+
+script:
+  - python -c "import jpype"
+  - python test/testsuite.py
