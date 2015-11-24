@@ -16,7 +16,7 @@ def run20times():
 	op = mp.Queue()
 	ps = []
 	for i in range(20):
-		ps.append(mp.Process(target=runfor60))
+		ps.append(mp.Process(target=runfor60, args=(op, )))
 
 	for p in ps:
 		p.start()
@@ -24,7 +24,7 @@ def run20times():
 	for p in ps:
 		p.join()
 
-	for i in range(0,20):
+	for i in range(20):
 		res = op.get()
 		ys.append(res[0])
 		xs.append(res[1])
@@ -35,10 +35,9 @@ def run20times():
 	plt.xlabel("Random number")
 	plt.ylabel("Mi calculation")
 	plt.xlim(0, 1)
-	plt.ylim(0, 7)
 	plt.show()
 
-def runfor60():
+def runfor60(op):
 	T = 60000
 	randy = rn.rand()
 	net = Connect8L([100, 100, 100, 100, 100, 100, 100, 100, 200], randy)
@@ -59,7 +58,7 @@ def runfor60():
 	#LETS SIMULATE
 	no_layers = 9
 	for t in xrange(T):
-	
+		print t	
 		#Go through each of hte layers and apply some background firing.
 		for i in range(no_layers):
 			if i < 8 :
@@ -81,9 +80,8 @@ def runfor60():
 
 	miCalcClass = JPackage('infodynamics.measures.continuous.kraskov').MultiInfoCalculatorKraskov2
 	miCalc = miCalcClass()
-	#8 lines
 	miCalc.initialise(8)
-
+	
 	yss = np.zeros([2950, 8])
 	offset = 50
 	for i in range(no_layers - 1):
@@ -104,10 +102,9 @@ def runfor60():
 	miCalc.addObservations(yss)
 	miCalc.finaliseAddObservations()
 	res = miCalc.computeAverageLocalOfObservations()
-	return [res, randy]
+	op.put([res, randy])
 
 
 run20times()
-
 
 
