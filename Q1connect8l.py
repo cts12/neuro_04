@@ -110,6 +110,9 @@ def Connect8L(layers, p):
 					if rewire < floatp:
 						net.layer[idx].S[idx][i][j] = 0
 						rm = rn.randint(8)
+						#dont want to produce another intra connection
+						while rm == idx:
+							rm = rn.randint(8)
 						rnint = rn.randint(100)
 						net.layer[rm].S[idx][rnint][j] = 1
 						

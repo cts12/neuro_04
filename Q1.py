@@ -84,7 +84,8 @@ for t in xrange(T):
 				inject = rn.poisson(0.01)
 				if inject > 0 :
 					net.layer[i].I[n] = 15
-
+		#I wasn't so sure if the ibhibitory neurons should fire so much
+		# as it really reduces the rate of fire of the excitatory neurons
 		else : 
 			net.layer[i].I = np.zeros(200)
 			for n in range(200):
